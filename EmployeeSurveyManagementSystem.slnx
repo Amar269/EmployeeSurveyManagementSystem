@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="BusinessLogicLayer/BusinessLogicLayer.csproj" />
+  <Project Path="DataAccessLayer/DataAccessLayer.csproj" />
+  <Project Path="EmployeeSurveyManagementSystem/EmployeeSurveyManagementSystem.csproj" />
+  <Project Path="ModelLayer/ModelLayer.csproj" />
+</Solution>

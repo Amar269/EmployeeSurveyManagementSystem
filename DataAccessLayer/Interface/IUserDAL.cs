@@ -4,9 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using ModelLayer.Entity;
+
 namespace DataAccessLayer.Interface
 {
-    internal interface IUserDAL
+    public interface IUserDAL
     {
+        Task<User?> GetUserByEmail(string email);
+
+        Task<Role?> GetRoleByName(string roleName);
+
+        Task AddUser(User user);
     }
 }

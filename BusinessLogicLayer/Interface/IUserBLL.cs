@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using ModelLayer.DTO.User;
+
 namespace BusinessLogicLayer.Interface
 {
-    internal interface IUserBLL
+    public interface IUserBLL
     {
+        Task<bool> RegisterUser(RegisterRequest request);
     }
 }

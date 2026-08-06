@@ -15,5 +15,7 @@ namespace DataAccessLayer.Interface
         Task<Role?> GetRoleByName(string roleName);
 
         Task AddUser(User user);
+
+        
     }
 }

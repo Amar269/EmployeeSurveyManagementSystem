@@ -1,4 +1,5 @@
 ﻿using BusinessLogicLayer.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ModelLayer.DTO.User;
 
@@ -26,6 +27,37 @@ namespace EmployeeSurveyManagementSystem.Controllers
                 message = "User Registered Successfully",
                 data = result
             });
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginRequest request)
+        {
+            try
+            {
+                var result = await _userBLL.LoginUser(request);
+
+                return Ok(new
+                {
+                    success = true,
+                    message = "Login Successful",
+                    data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
+            }
+        }
+
+        [Authorize]
+        [HttpGet("profile")]
+        public IActionResult Profile()
+        {
+            return Ok("JWT Token Verified Successfully");
         }
     }
 

@@ -10,5 +10,6 @@ namespace BusinessLogicLayer.Interface
     public interface IUserBLL
     {
         Task<UserResponse> RegisterUser(RegisterRequest request);
+        Task<LoginResponse> LoginUser(LoginRequest request);
     }
 }

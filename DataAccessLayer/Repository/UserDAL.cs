@@ -19,26 +19,26 @@ namespace DataAccessLayer.Repository
             _context = context;
         }
 
-        public Task AddUser(User user)
+        public async Task AddUser(User user)
         {
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
         }
 
-        public Task<Role?> GetRoleByName(string roleName)
+        public async Task<Role?> GetRoleByName(string roleName)
         {
             return await _context.Roles
         .FirstOrDefaultAsync(r => r.RoleName == roleName);
         }
 
-        public Task<User?> GetUserByEmail(string email)
+        public async Task<User?> GetUserByEmail(string email)
         {
             return await _context.Users
         .Include(u => u.Role)
         .FirstOrDefaultAsync(u => u.Email == email);
         }
-        }
     }
 }
+
 
 

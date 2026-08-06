@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using ModelLayer.DTO.User;
 
 namespace BusinessLogicLayer.Interface
 {
     public interface IUserBLL
     {
-        Task<bool> RegisterUser(RegisterRequest request);
+        Task<UserResponse> RegisterUser(RegisterRequest request);
     }
 }

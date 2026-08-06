@@ -1,5 +1,10 @@
 using DataAccessLayer.Context;
 using Microsoft.EntityFrameworkCore;
+using BusinessLogicLayer.Interface;
+using BusinessLogicLayer.Service;
+using DataAccessLayer.Interface;
+using DataAccessLayer.Repository;
+
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -12,6 +17,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddScoped<IUserDAL, UserDAL>();
+
+builder.Services.AddScoped<IUserBLL, UserBLL>();
 
 var app = builder.Build();
 

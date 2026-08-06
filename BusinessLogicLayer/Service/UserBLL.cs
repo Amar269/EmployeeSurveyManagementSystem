@@ -8,16 +8,73 @@ using DataAccessLayer.Interface;
 using BusinessLogicLayer.Interface;
 using ModelLayer.DTO.User;
 using ModelLayer.Entity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+
 
 namespace BusinessLogicLayer.Service
 {
     public class UserBLL : IUserBLL
     {
         private readonly IUserDAL _userDAL;
+        private readonly IConfiguration _configuration;
 
-        public UserBLL(IUserDAL userDAL)
+        public UserBLL(IUserDAL userDAL , IConfiguration configuration  )
         {
             _userDAL = userDAL;
+            _configuration = configuration;
+        }
+
+        public async Task<LoginResponse> LoginUser(LoginRequest request)
+        {
+            var user = await _userDAL.GetUserByEmail(request.Email);
+
+            if (user == null)
+            {
+                throw new Exception("Invalid Email");
+            }
+
+            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(request.Password, user.Password);
+
+            if (!isPasswordValid)
+            {
+                throw new Exception("Invalid Password");
+            }
+
+            string key = _configuration["Jwt:Key"]!;
+            string issuer = _configuration["Jwt:Issuer"]!;
+            string audience = _configuration["Jwt:Audience"]!;
+            int duration = Convert.ToInt32(_configuration["Jwt:DurationInMinutes"]);
+
+            var claims = new List<Claim>
+                    {
+                        new Claim("UserId", user.UserId.ToString()),
+                        new Claim(ClaimTypes.Name, user.FirstName),
+                        new Claim(ClaimTypes.Email, user.Email),
+                        new Claim(ClaimTypes.Role, user.Role.RoleName)
+                    };
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+
+            var credentials = new SigningCredentials(
+                securityKey,
+                SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: issuer,
+                audience: audience,
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(duration),
+                signingCredentials: credentials);
+
+            string jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return new LoginResponse
+            {
+                Token = jwtToken
+            };
         }
 
         public async Task<UserResponse> RegisterUser(RegisterRequest request)

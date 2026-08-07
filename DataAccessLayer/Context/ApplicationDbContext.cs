@@ -17,6 +17,11 @@ namespace DataAccessLayer.Context
         public DbSet<User> Users { get; set; }
 
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Survey> Surveys { get; set; }
+
+        public DbSet<Question> Questions { get; set; }
+
+        public DbSet<Response> Responses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

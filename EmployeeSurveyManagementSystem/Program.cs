@@ -4,10 +4,6 @@ using BusinessLogicLayer.Interface;
 using BusinessLogicLayer.Service;
 using DataAccessLayer.Interface;
 using DataAccessLayer.Repository;
-using BusinessLogicLayer.Interface;
-using BusinessLogicLayer.Service;
-using DataAccessLayer.Interface;
-using DataAccessLayer.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -51,6 +47,9 @@ builder.Services.AddScoped<IUserBLL, UserBLL>();
 builder.Services.AddScoped<IUserDAL, UserDAL>();
 
 builder.Services.AddScoped<IUserBLL, UserBLL>();
+
+builder.Services.AddScoped<ISurveyRepository, SurveyRepository>();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("ReactPolicy", policy =>

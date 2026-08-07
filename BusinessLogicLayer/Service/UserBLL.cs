@@ -50,7 +50,7 @@ namespace BusinessLogicLayer.Service
 
             var claims = new List<Claim>
                     {
-                        new Claim("UserId", user.UserId.ToString()),
+                        new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
                         new Claim(ClaimTypes.Name, user.FirstName),
                         new Claim(ClaimTypes.Email, user.Email),
                         new Claim(ClaimTypes.Role, user.Role.RoleName)

@@ -26,12 +26,19 @@ namespace BusinessLogicLayer.Service
 
         public async Task<bool> SubmitSurveyAsync(int userId, SubmitSurveyRequest request)
         {
-            throw new NotImplementedException();
+            var alreadySubmitted = await _surveyRepository.HasUserSubmittedSurveyAsync(userId);
+
+            if (alreadySubmitted)
+            {
+                return false;
+            }
+
+            return await _surveyRepository.SubmitSurveyAsync(userId, request);
         }
 
         public async Task<bool> HasUserSubmittedSurveyAsync(int userId)
         {
-            throw new NotImplementedException();
+            return await _surveyRepository.HasUserSubmittedSurveyAsync(userId);
         }
     }
 }

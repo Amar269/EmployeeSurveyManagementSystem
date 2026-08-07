@@ -31,6 +31,27 @@ namespace DataAccessLayer.Context
                 .HasOne(u => u.Role)
                 .WithMany(r => r.Users)
                 .HasForeignKey(u => u.RoleId);
+
+            modelBuilder.Entity<Survey>()
+                .HasMany(s => s.Questions)
+                .WithOne(q => q.Survey)
+                .HasForeignKey(q => q.SurveyId);
+
+            modelBuilder.Entity<Question>()
+                .HasMany(q => q.Responses)
+                .WithOne(r => r.Question)
+                .HasForeignKey(r => r.QuestionId);
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Responses)
+                .WithOne(r => r.User)
+                .HasForeignKey(r => r.UserId);
+
+            modelBuilder.Entity<Survey>()
+                .HasMany<Response>()
+                .WithOne(r => r.Survey)
+                .HasForeignKey(r => r.SurveyId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

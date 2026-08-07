@@ -27,5 +27,7 @@ namespace ModelLayer.Entity
         public bool IsActive { get; set; }
 
         public Role Role { get; set; } = null!;
+
+        public ICollection<Response> Responses { get; set; }
     }
 }

@@ -50,6 +50,10 @@ builder.Services.AddScoped<IUserBLL, UserBLL>();
 
 builder.Services.AddScoped<ISurveyRepository, SurveyRepository>();
 
+builder.Services.AddScoped<ISurveyService, SurveyService>();
+
+builder.Services.AddScoped<ISurveyRepository, SurveyRepository>();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("ReactPolicy", policy =>

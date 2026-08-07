@@ -3,10 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ModelLayer.DTO.Survey;
 
 namespace BusinessLogicLayer.Interface
 {
-    internal interface ISurveyService
+    public interface ISurveyService
     {
+        Task<SurveyDto> GetSurveyAsync();
+
+        Task<bool> SubmitSurveyAsync(int userId, SubmitSurveyRequest request);
+
+        Task<bool> HasUserSubmittedSurveyAsync(int userId);
     }
 }

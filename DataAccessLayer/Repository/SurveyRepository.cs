@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using DataAccessLayer.Context;
 using DataAccessLayer.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -23,17 +22,54 @@ namespace DataAccessLayer.Repository
 
         public async Task<SurveyDto> GetSurveyAsync()
         {
-            throw new NotImplementedException();
+            var survey = await _context.Surveys
+                .Include(s => s.Questions)
+                .FirstOrDefaultAsync();
+
+            if (survey == null)
+                return null;
+
+            return new SurveyDto
+            {
+                SurveyId = survey.SurveyId,
+                Title = survey.Title,
+                Description = survey.Description,
+
+                Questions = survey.Questions
+                    .Select(q => new QuestionDto
+                    {
+                        QuestionId = q.QuestionId,
+                        QuestionText = q.QuestionText,
+                        QuestionType = q.QuestionType
+                    }).ToList()
+            };
         }
 
         public async Task<bool> SubmitSurveyAsync(int userId, SubmitSurveyRequest request)
         {
-            throw new NotImplementedException();
+            foreach (var answer in request.Answers)
+            {
+                var response = new Response
+                {
+                    UserId = userId,
+                    SurveyId = request.SurveyId,
+                    QuestionId = answer.QuestionId,
+                    Answer = answer.Answer,
+                    SubmittedAt = DateTime.Now
+                };
+
+                await _context.Responses.AddAsync(response);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<bool> HasUserSubmittedSurveyAsync(int userId)
         {
-            throw new NotImplementedException();
+            return await _context.Responses
+        .AnyAsync(r => r.UserId == userId);
         }
     }
 }

@@ -71,5 +71,16 @@ namespace DataAccessLayer.Repository
             return await _context.Responses
         .AnyAsync(r => r.UserId == userId);
         }
+
+        public async Task<List<SurveyListDto>> GetAllSurveysAsync()
+        {
+            return await _context.Surveys
+                .Select(s => new SurveyListDto
+                {
+                    SurveyId = s.SurveyId,
+                    Title = s.Title
+                })
+                .ToListAsync();
+                }
     }
 }

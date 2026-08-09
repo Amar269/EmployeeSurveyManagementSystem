@@ -9,5 +9,7 @@ namespace DataAccessLayer.Interface
         Task<bool> SubmitSurveyAsync(int userId, SubmitSurveyRequest request);
 
         Task<bool> HasUserSubmittedSurveyAsync(int userId);
+
+        Task<List<SurveyListDto>> GetAllSurveysAsync();
     }
 }

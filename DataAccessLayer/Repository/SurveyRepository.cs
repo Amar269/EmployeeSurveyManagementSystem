@@ -20,11 +20,11 @@ namespace DataAccessLayer.Repository
             _context = context;
         }
 
-        public async Task<SurveyDto> GetSurveyAsync()
+        public async Task<SurveyDto> GetSurveyAsync(int surveyId)
         {
             var survey = await _context.Surveys
                 .Include(s => s.Questions)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(s => s.SurveyId == surveyId);
 
             if (survey == null)
                 return null;
@@ -41,10 +41,10 @@ namespace DataAccessLayer.Repository
                         QuestionId = q.QuestionId,
                         QuestionText = q.QuestionText,
                         QuestionType = q.QuestionType
-                    }).ToList()
+                    })
+                    .ToList()
             };
         }
-
         public async Task<bool> SubmitSurveyAsync(int userId, SubmitSurveyRequest request)
         {
             foreach (var answer in request.Answers)

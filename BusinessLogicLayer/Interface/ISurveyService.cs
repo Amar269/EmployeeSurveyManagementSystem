@@ -9,7 +9,7 @@ namespace BusinessLogicLayer.Interface
 {
     public interface ISurveyService
     {
-        Task<SurveyDto> GetSurveyAsync();
+        Task<SurveyDto> GetSurveyAsync(int surveyId);
 
         Task<bool> SubmitSurveyAsync(int userId, SubmitSurveyRequest request);
 

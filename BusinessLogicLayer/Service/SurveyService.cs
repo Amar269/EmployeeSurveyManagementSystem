@@ -40,5 +40,11 @@ namespace BusinessLogicLayer.Service
         {
             return await _surveyRepository.HasUserSubmittedSurveyAsync(userId);
         }
+
+        public async Task<List<SurveyListDto>> GetAllSurveysAsync()
+        {
+            return await _surveyRepository.GetAllSurveysAsync();
+
+        }
     }
 }

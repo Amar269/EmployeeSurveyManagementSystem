@@ -29,6 +29,14 @@ namespace EmployeeSurveyManagementSystem.Controllers
             return Ok(survey);
         }
 
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllSurveys()
+        {
+            var surveys = await _surveyService.GetAllSurveysAsync();
+
+            return Ok(surveys);
+        }
+
         [HttpGet("check")]
         public async Task<IActionResult> CheckSurveyStatus()
         {
@@ -62,5 +70,7 @@ namespace EmployeeSurveyManagementSystem.Controllers
                 Message = "Survey submitted successfully."
             });
         }
+
+
     }
 }

@@ -46,5 +46,24 @@ namespace EmployeeSurveyManagementSystem.Controllers
                 SurveyId = surveyId
             });
         }
+
+        [HttpDelete("surveys/{surveyId}")]
+        public async Task<IActionResult> DeleteSurvey(int surveyId)
+        {
+            var result = await _adminService.DeleteSurveyAsync(surveyId);
+
+            if (!result)
+            {
+                return NotFound(new
+                {
+                    Message = "Survey not found."
+                });
+            }
+
+            return Ok(new
+            {
+                Message = "Survey deleted successfully."
+            });
+        }
     }
 }

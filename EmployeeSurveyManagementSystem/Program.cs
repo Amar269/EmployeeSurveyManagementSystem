@@ -54,6 +54,10 @@ builder.Services.AddScoped<ISurveyService, SurveyService>();
 
 builder.Services.AddScoped<ISurveyRepository, SurveyRepository>();
 
+builder.Services.AddScoped<IAdminService , AdminService>();
+
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("ReactPolicy", policy =>

@@ -100,5 +100,21 @@ namespace EmployeeSurveyManagementSystem.Controllers
 
             return Ok(surveys);
         }
+
+        // GET RESPONSES FOR A SUBMITTED SURVEY
+        [HttpGet("submitted/{surveyId}")]
+        public async Task<IActionResult> GetSubmittedResponses(int surveyId)
+        {
+            int userId = Convert.ToInt32(
+                User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+            );
+
+            var responses = await _surveyService.GetSubmittedResponsesAsync(
+                userId,
+                surveyId
+            );
+
+            return Ok(responses);
+        }
     }
 }

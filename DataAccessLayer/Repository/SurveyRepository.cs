@@ -101,6 +101,7 @@ namespace DataAccessLayer.Repository
                 {
                     r.SurveyId,
                     r.Survey.Title
+
                 })
                 .Select(g => new SubmittedSurveyDto
                 {
@@ -111,5 +112,25 @@ namespace DataAccessLayer.Repository
                 .OrderByDescending(s => s.SubmittedAt)
                 .ToListAsync();
                 }
+
+        public async Task<List<SubmittedResponseDto>> GetSubmittedResponsesAsync(int userId, int surveyId)
+        {
+            return await _context.Responses
+        .Where(r =>
+            r.UserId == userId &&
+            r.SurveyId == surveyId)
+        .Include(r => r.Question)
+        .Select(r => new SubmittedResponseDto
+        {
+            QuestionId = r.QuestionId,
+
+            QuestionText = r.Question.QuestionText,
+
+            QuestionType = r.Question.QuestionType,
+
+            Answer = r.Answer
+        })
+        .ToListAsync();
+        }
     }
 }

@@ -22,15 +22,16 @@ namespace BusinessLogicLayer.Service
         {
             return await _surveyRepository.GetSurveyAsync(surveyId);
         }
+
         public async Task<bool> SubmitSurveyAsync(
             int userId,
             SubmitSurveyRequest request)
         {
             var alreadySubmitted =
                 await _surveyRepository.HasUserSubmittedSurveyAsync(
-        userId,
-        request.SurveyId
-    );
+                    userId,
+                    request.SurveyId
+                );
 
             if (alreadySubmitted)
             {
@@ -39,12 +40,18 @@ namespace BusinessLogicLayer.Service
 
             return await _surveyRepository.SubmitSurveyAsync(
                 userId,
-                request);
+                request
+            );
         }
 
-        public async Task<bool> HasUserSubmittedSurveyAsync(int userId, int surveyId)
+        public async Task<bool> HasUserSubmittedSurveyAsync(
+            int userId,
+            int surveyId)
         {
-            return await _surveyRepository.HasUserSubmittedSurveyAsync(userId, surveyId);
+            return await _surveyRepository.HasUserSubmittedSurveyAsync(
+                userId,
+                surveyId
+            );
         }
 
         public async Task<List<SurveyListDto>> GetAllSurveysAsync()
@@ -52,9 +59,22 @@ namespace BusinessLogicLayer.Service
             return await _surveyRepository.GetAllSurveysAsync();
         }
 
-        public async Task<List<SubmittedSurveyDto>> GetSubmittedSurveysAsync(int userId)
+        public async Task<List<SubmittedSurveyDto>> GetSubmittedSurveysAsync(
+            int userId)
         {
-            return await _surveyRepository.GetSubmittedSurveysAsync(userId);
+            return await _surveyRepository.GetSubmittedSurveysAsync(
+                userId
+            );
+        }
+
+        public async Task<List<SubmittedResponseDto>> GetSubmittedResponsesAsync(
+            int userId,
+            int surveyId)
+        {
+            return await _surveyRepository.GetSubmittedResponsesAsync(
+                userId,
+                surveyId
+            );
         }
     }
 }

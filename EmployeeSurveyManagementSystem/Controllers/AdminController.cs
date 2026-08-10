@@ -1,7 +1,8 @@
-﻿using System;
-using BusinessLogicLayer.Interface;
-using Microsoft.AspNetCore.Mvc;
+﻿using BusinessLogicLayer.Interface;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using ModelLayer.DTO.Admin;
+using System;
 
 namespace EmployeeSurveyManagementSystem.Controllers
 {
@@ -23,6 +24,27 @@ namespace EmployeeSurveyManagementSystem.Controllers
             var responses = await _adminService.GetAllResponsesAsync();
 
             return Ok(responses);
+
+        }
+
+        [HttpGet("surveys")]
+        public async Task<IActionResult> GetAllSurveys()
+        {
+            var surveys = await _adminService.GetAllSurveysAsync();
+
+            return Ok(surveys);
+        }
+
+        [HttpPost("surveys")]
+        public async Task<IActionResult> AddSurvey([FromBody] AddSurveyRequest request)
+        {
+            var surveyId = await _adminService.AddSurveyAsync(request);
+
+            return Ok(new
+            {
+                Message = "Survey added successfully.",
+                SurveyId = surveyId
+            });
         }
     }
 }

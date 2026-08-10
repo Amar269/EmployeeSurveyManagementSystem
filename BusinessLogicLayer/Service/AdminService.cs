@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BusinessLogicLayer.Interface;
 using DataAccessLayer.Interface;
 using ModelLayer.DTO.Admin;
+using ModelLayer.DTO.Survey;
 
 namespace BusinessLogicLayer.Service
 {
@@ -18,9 +19,19 @@ namespace BusinessLogicLayer.Service
             _adminRepository = adminRepository;
         }
 
+        public async Task<int> AddSurveyAsync(AddSurveyRequest request)
+        {
+            return await _adminRepository.AddSurveyAsync(request);
+        }
+
         public async Task<List<AdminResponseDto>> GetAllResponsesAsync()
         {
             return await _adminRepository.GetAllResponsesAsync();
+        }
+
+        public  async Task<List<SurveyListDto>> GetAllSurveysAsync()
+        {
+            return await _adminRepository.GetAllSurveysAsync();
         }
     }
 }

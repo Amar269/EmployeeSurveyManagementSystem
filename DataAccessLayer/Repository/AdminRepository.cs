@@ -1,12 +1,14 @@
 ﻿using DataAccessLayer.Context;
 using DataAccessLayer.Interface;
+using Microsoft.EntityFrameworkCore;
 using ModelLayer.DTO.Admin;
+using ModelLayer.DTO.Survey;
+using ModelLayer.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer.Repository
 {
@@ -19,6 +21,34 @@ namespace DataAccessLayer.Repository
             _context = context;
         }
 
+        public async Task<int> AddSurveyAsync(AddSurveyRequest request)
+        {
+            var survey = new Survey
+            {
+                Title = request.Title,
+                Description = request.Description
+            };
+
+            await _context.Surveys.AddAsync(survey);
+
+            await _context.SaveChangesAsync();
+
+            foreach (var question in request.Questions)
+            {
+                var newQuestion = new Question
+                {
+                    SurveyId = survey.SurveyId,
+                    QuestionText = question.QuestionText,
+                    QuestionType = question.QuestionType
+                };
+
+                await _context.Questions.AddAsync(newQuestion);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return survey.SurveyId;
+        }
 
         public async Task<List<AdminResponseDto>> GetAllResponsesAsync()
         {
@@ -41,6 +71,19 @@ namespace DataAccessLayer.Repository
 
             })
             .ToListAsync();
+        }
+
+        public async Task<List<SurveyListDto>> GetAllSurveysAsync()
+        {
+            return await _context.Surveys
+                .Select(s => new SurveyListDto()
+                {
+                    SurveyId = s.SurveyId,
+                    Title = s.Title,
+                })
+                .ToListAsync();
+
+
         }
     }
 }

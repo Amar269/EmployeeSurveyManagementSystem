@@ -24,6 +24,11 @@ namespace BusinessLogicLayer.Service
             return await _adminRepository.AddSurveyAsync(request);
         }
 
+        public async Task<bool> DeleteSurveyAsync(int surveyId)
+        {
+            return await _adminRepository.DeleteSurveyAsync(surveyId);
+        }
+
         public async Task<List<AdminResponseDto>> GetAllResponsesAsync()
         {
             return await _adminRepository.GetAllResponsesAsync();

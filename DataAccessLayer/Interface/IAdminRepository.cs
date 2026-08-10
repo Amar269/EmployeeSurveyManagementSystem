@@ -16,5 +16,7 @@ namespace DataAccessLayer.Interface
 
         Task<int> AddSurveyAsync(AddSurveyRequest request);
 
+        Task<bool> DeleteSurveyAsync(int surveyId);
+
     }
 }

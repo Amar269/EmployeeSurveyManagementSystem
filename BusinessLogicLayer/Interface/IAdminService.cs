@@ -15,5 +15,7 @@ namespace BusinessLogicLayer.Interface
         Task<List<SurveyListDto>> GetAllSurveysAsync();
 
         Task<int> AddSurveyAsync(AddSurveyRequest request);
+
+        Task<bool> DeleteSurveyAsync(int surveyId);
     }
 }

@@ -50,6 +50,36 @@ namespace DataAccessLayer.Repository
             return survey.SurveyId;
         }
 
+        public async Task<bool> DeleteSurveyAsync(int surveyId)
+        {
+            var survey = await _context.Surveys
+        .Include(s => s.Questions)
+        .FirstOrDefaultAsync(s => s.SurveyId == surveyId);
+
+            if (survey == null)
+            {
+                return false;
+            }
+
+            // Delete responses related to this survey
+            var responses = await _context.Responses
+                .Where(r => r.SurveyId == surveyId)
+                .ToListAsync();
+
+            _context.Responses.RemoveRange(responses);
+
+            // Delete questions related to this survey
+            _context.Questions.RemoveRange(survey.Questions);
+
+            // Delete the survey
+            _context.Surveys.Remove(survey);
+
+            await _context.SaveChangesAsync();
+
+            return true;
+
+        }
+
         public async Task<List<AdminResponseDto>> GetAllResponsesAsync()
         {
             return await _context.Responses

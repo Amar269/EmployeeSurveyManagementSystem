@@ -22,13 +22,15 @@ namespace BusinessLogicLayer.Service
         {
             return await _surveyRepository.GetSurveyAsync(surveyId);
         }
-
         public async Task<bool> SubmitSurveyAsync(
             int userId,
             SubmitSurveyRequest request)
         {
             var alreadySubmitted =
-                await _surveyRepository.HasUserSubmittedSurveyAsync(userId);
+                await _surveyRepository.HasUserSubmittedSurveyAsync(
+        userId,
+        request.SurveyId
+    );
 
             if (alreadySubmitted)
             {
@@ -40,14 +42,19 @@ namespace BusinessLogicLayer.Service
                 request);
         }
 
-        public async Task<bool> HasUserSubmittedSurveyAsync(int userId)
+        public async Task<bool> HasUserSubmittedSurveyAsync(int userId, int surveyId)
         {
-            return await _surveyRepository.HasUserSubmittedSurveyAsync(userId);
+            return await _surveyRepository.HasUserSubmittedSurveyAsync(userId, surveyId);
         }
 
         public async Task<List<SurveyListDto>> GetAllSurveysAsync()
         {
             return await _surveyRepository.GetAllSurveysAsync();
+        }
+
+        public async Task<List<SubmittedSurveyDto>> GetSubmittedSurveysAsync(int userId)
+        {
+            return await _surveyRepository.GetSubmittedSurveysAsync(userId);
         }
     }
 }

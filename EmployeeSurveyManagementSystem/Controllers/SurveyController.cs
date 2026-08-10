@@ -18,10 +18,11 @@ namespace EmployeeSurveyManagementSystem.Controllers
             _surveyService = surveyService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetSurvey()
+        // GET SELECTED SURVEY
+        [HttpGet("{surveyId}")]
+        public async Task<IActionResult> GetSurvey(int surveyId)
         {
-            var survey = await _surveyService.GetSurveyAsync();
+            var survey = await _surveyService.GetSurveyAsync(surveyId);
 
             if (survey == null)
                 return NotFound("Survey not found.");
@@ -29,6 +30,7 @@ namespace EmployeeSurveyManagementSystem.Controllers
             return Ok(survey);
         }
 
+        // GET ALL SURVEYS
         [HttpGet("all")]
         public async Task<IActionResult> GetAllSurveys()
         {
@@ -37,12 +39,19 @@ namespace EmployeeSurveyManagementSystem.Controllers
             return Ok(surveys);
         }
 
-        [HttpGet("check")]
-        public async Task<IActionResult> CheckSurveyStatus()
+        // CHECK WHETHER CURRENT USER SUBMITTED THIS SURVEY
+        [HttpGet("check/{surveyId}")]
+        public async Task<IActionResult> CheckSurveyStatus(int surveyId)
         {
-            int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            int userId = Convert.ToInt32(
+                User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+            );
 
-            bool submitted = await _surveyService.HasUserSubmittedSurveyAsync(userId);
+            bool submitted =
+                await _surveyService.HasUserSubmittedSurveyAsync(
+                    userId,
+                    surveyId
+                );
 
             return Ok(new
             {
@@ -50,12 +59,20 @@ namespace EmployeeSurveyManagementSystem.Controllers
             });
         }
 
+        // SUBMIT SURVEY
         [HttpPost("submit")]
-        public async Task<IActionResult> SubmitSurvey([FromBody] SubmitSurveyRequest request)
+        public async Task<IActionResult> SubmitSurvey(
+            [FromBody] SubmitSurveyRequest request)
         {
-            int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            int userId = Convert.ToInt32(
+                User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+            );
 
-            bool result = await _surveyService.SubmitSurveyAsync(userId, request);
+            bool result =
+                await _surveyService.SubmitSurveyAsync(
+                    userId,
+                    request
+                );
 
             if (!result)
             {
@@ -71,6 +88,17 @@ namespace EmployeeSurveyManagementSystem.Controllers
             });
         }
 
+        // GET SUBMITTED SURVEYS FOR CURRENT USER
+        [HttpGet("submitted")]
+        public async Task<IActionResult> GetSubmittedSurveys()
+        {
+            int userId = Convert.ToInt32(
+                User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+            );
 
+            var surveys = await _surveyService.GetSubmittedSurveysAsync(userId);
+
+            return Ok(surveys);
+        }
     }
 }

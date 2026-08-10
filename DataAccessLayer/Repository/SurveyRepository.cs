@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using DataAccessLayer.Context;
 using DataAccessLayer.Interface;
@@ -20,6 +19,7 @@ namespace DataAccessLayer.Repository
             _context = context;
         }
 
+       
         public async Task<SurveyDto> GetSurveyAsync(int surveyId)
         {
             var survey = await _context.Surveys
@@ -45,7 +45,11 @@ namespace DataAccessLayer.Repository
                     .ToList()
             };
         }
-        public async Task<bool> SubmitSurveyAsync(int userId, SubmitSurveyRequest request)
+
+       
+        public async Task<bool> SubmitSurveyAsync(
+            int userId,
+            SubmitSurveyRequest request)
         {
             foreach (var answer in request.Answers)
             {
@@ -66,12 +70,18 @@ namespace DataAccessLayer.Repository
             return true;
         }
 
-        public async Task<bool> HasUserSubmittedSurveyAsync(int userId)
+        
+        public async Task<bool> HasUserSubmittedSurveyAsync(
+            int userId,
+            int surveyId)
         {
             return await _context.Responses
-        .AnyAsync(r => r.UserId == userId);
+                .AnyAsync(r =>
+                    r.UserId == userId &&
+                    r.SurveyId == surveyId);
         }
 
+        
         public async Task<List<SurveyListDto>> GetAllSurveysAsync()
         {
             return await _context.Surveys
@@ -80,6 +90,25 @@ namespace DataAccessLayer.Repository
                     SurveyId = s.SurveyId,
                     Title = s.Title
                 })
+                .ToListAsync();
+        }
+
+        public async Task<List<SubmittedSurveyDto>> GetSubmittedSurveysAsync(int userId)
+        {
+            return await _context.Responses
+                .Where(r => r.UserId == userId)
+                .GroupBy(r => new
+                {
+                    r.SurveyId,
+                    r.Survey.Title
+                })
+                .Select(g => new SubmittedSurveyDto
+                {
+                    SurveyId = g.Key.SurveyId,
+                    Title = g.Key.Title,
+                    SubmittedAt = g.Max(r => r.SubmittedAt)
+                })
+                .OrderByDescending(s => s.SubmittedAt)
                 .ToListAsync();
                 }
     }

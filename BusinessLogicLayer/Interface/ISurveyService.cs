@@ -13,8 +13,10 @@ namespace BusinessLogicLayer.Interface
 
         Task<bool> SubmitSurveyAsync(int userId, SubmitSurveyRequest request);
 
-        Task<bool> HasUserSubmittedSurveyAsync(int userId);
+        Task<bool> HasUserSubmittedSurveyAsync(int userId, int surveyId);
 
         Task<List<SurveyListDto>> GetAllSurveysAsync();
+
+        Task<List<SubmittedSurveyDto>> GetSubmittedSurveysAsync(int userId);
     }
 }

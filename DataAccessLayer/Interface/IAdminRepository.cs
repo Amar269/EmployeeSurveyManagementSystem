@@ -9,6 +9,7 @@ namespace DataAccessLayer.Interface
 {
     public interface IAdminRepository
     {
+        Task<List<AdminResponseDto>> GetAllResponsesAsync();
 
     }
 }
